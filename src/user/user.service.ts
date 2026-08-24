@@ -1,8 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RegisterDto } from 'src/auth/dto/registerUser.dto';
-import { Model } from 'mongoose';
+import { Model, QueryFilter } from 'mongoose';
 import { User } from './schemas/user.schema';
+import { LoginDto } from 'src/auth/dto/loginUser.dto';
 
 @Injectable()
 export class UserService {
@@ -23,5 +24,12 @@ export class UserService {
       }
       throw err;
     }
+  }
+async findOne(filter: QueryFilter<User>) {
+  // Mongoose queries MongoDB under the hood using this object filter
+  return await this.userModel.findOne(filter);
+}
+  async getUserById(id: string){
+    return await this.userModel.findOne({_id: id})
   }
 }
